@@ -154,7 +154,7 @@ class OktaSession(object):
 
         return self.okta_session.get(url=appslist_url, headers=appslist_headers).json()
 
-    def connect_to(self, url_app):
+    def connect_to(self, url_app, headers={}):
         """Connect to an assigned app.
 
         Args:
@@ -173,13 +173,15 @@ class OktaSession(object):
         }
         headers_saml = {
             'origin': "https://{}.okta.com".format(self.organization),
-            'upgrade-insecure-requests': "1",
+            'Upgrade-Insecure-Requests': "1",
             'content-type': "application/x-www-form-urlencoded",
             'accept': "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
             'accept-encoding': "gzip, deflate, br",
             'accept-language': "en-US,en;q=0.9,fr;q=0.8,nl;q=0.7",
             'cache-control': "no-cache",
         }
+        if headers:
+            headers_saml.update(headers)
         return self.okta_session.post(url=url_saml, data=payload_saml, headers=headers_saml)
 
     def connect_from_appslist(self):
